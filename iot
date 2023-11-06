@@ -1,0 +1,49 @@
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(13, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(2, OUTPUT);
+  Serial.println("enter choice:");
+}
+
+void loop()
+{
+  while(Serial.available()!=0)
+  {
+    char ch=Serial.read();
+    switch(ch)
+    {
+        case 98:
+             digitalWrite(2, HIGH);
+             digitalWrite(2, LOW);
+             break;
+      
+      
+        case 114:
+             digitalWrite(13, HIGH);
+             delay(1000); 
+             digitalWrite(13, LOW);
+             delay(1000);
+             break;
+        case 121:
+             digitalWrite(8, HIGH);
+             delay(1000); 
+             digitalWrite(8, LOW);
+             delay(1000);
+             break;
+        case 103:
+             digitalWrite(2, HIGH);
+             delay(1000); 
+             digitalWrite(2, LOW);
+             delay(1000);
+             break;
+      default:
+             Serial.println("\nPlease enter valid input");
+             
+    } 
+  }
+  
+}
+
+  
