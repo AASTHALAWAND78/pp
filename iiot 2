@@ -1,0 +1,246 @@
+Object dection using distance sensor anf LED
+
+// Define pins for ultrasonic and LED
+int const trigPin = 4;
+int const echoPin = 7;
+int const ledPin = 8;  // Define a pin for the LED
+
+const int thresholdDistance = 20;  // Set the threshold for object detection in centimeters
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT); // Set the LED pin as an output
+}
+
+void loop() {
+  int duration, distance;
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);  // Use a short delay to create the pulse
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration / 2) / 29.1;
+  Serial.println(distance);
+
+  if (distance <= thresholdDistance) {
+    // Object detected
+    digitalWrite(ledPin, HIGH); // Turn on the LED when an object is detected
+  } else {
+    // No object
+    digitalWrite(ledPin, LOW); // Turn off the LED when no object is detected
+  }
+
+  delay(1000);
+}
+
+Object dection using distance sensor and Buzzer
+
+// Define pins for ultrasonic, buzzer, and ledpin
+int const trigPin = 4;
+int const echoPin = 7;
+int const buzzerPin = 8;  // Define a pin for the buzzer it should be connected to digital pin and analog pin each respectively
+
+const int thresholdDistance = 20;  // Set the threshold for object detection in centimeters
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(buzzerPin, OUTPUT); // Set the buzzer pin as an output
+}
+
+void loop() {
+  int duration, distance;
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);  // Use a short delay to create the pulse
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration / 2) / 29.1;
+  Serial.println(distance);
+
+  if (distance <= thresholdDistance) {
+    // Object detected
+    digitalWrite(buzzerPin, HIGH); // Turn on the buzzer when an object is detected
+  } else {
+    // No object
+    digitalWrite(buzzerPin, LOW); // Turn off the buzzer when no object is detected
+  }
+
+  delay(1000);
+}
+
+Gas Sensor
+
+// Define pins for gas sensor and LED
+int gasSensorPin = A0;
+int ledPin = 13;
+bool gasLeakage = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  int sensorValue = analogRead(gasSensorPin);
+  Serial.print("Gas Sensor Value: ");
+  Serial.println(sensorValue);
+
+  if (sensorValue > 200) {
+    // Gas is detected (you may need to adjust this threshold)
+    Serial.println("1 Gas leakage detected"); // Gas leakage is present
+    digitalWrite(ledPin, LOW); // Turn off LED
+    gasLeakage = true;
+  } else {
+    // No gas detected
+    Serial.println("0- Gas leakage not detected"); // No gas leakage
+    if (gasLeakage) {
+      // Only enter this block when transitioning from gas leakage to no gas leakage
+      digitalWrite(ledPin, HIGH); // Turn off LED
+      gasLeakage = false;
+    } else {
+      digitalWrite(ledPin, HIGH); // Blink the LED
+      delay(500); // Blink for 500 milliseconds
+      digitalWrite(ledPin, HIGH);
+      delay(500); // Off for 500 milliseconds
+    }
+  }
+
+  delay(100); // Adjust the delay as needed
+}
+
+
+
+
+
+ 
+
+IR Sensor
+
+int SensorPin = 9;
+int OutputPin = 13;
+
+void setup() {
+  pinMode(OutputPin, OUTPUT);
+  pinMode(SensorPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int SensorValue = digitalRead(SensorPin);
+ 
+  Serial.print("SensorPin Value: ");
+  Serial.println(SensorValue);
+  delay(1000);
+   if (SensorValue==LOW){ // LOW MEANS Object Detected
+    digitalWrite(OutputPin, HIGH);
+  }
+  else
+  {
+    digitalWrite(OutputPin, LOW);
+  }
+}
+
+RGB
+Counter exp -:
+// C++ code
+//
+int cnt;
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+}
+
+void loop()
+{
+  Serial.println(cnt);
+  if(cnt<=10)
+  {
+    digitalWrite(13, HIGH);
+    delay(1000);
+    digitalWrite(13, LOW);
+    delay(1000);
+    cnt++;
+  }
+  else if(cnt>10 && cnt<=20)
+  {
+    digitalWrite(12, HIGH);
+    delay(1000);
+    digitalWrite(12, LOW);
+    delay(1000);
+    cnt++;
+  }
+  else if(cnt>20)
+  {
+    digitalWrite(11, HIGH);
+    delay(1000);
+    digitalWrite(11, LOW);
+    delay(1000);
+    cnt++;
+  }
+   
+}
+
+SOIL MOISTURE SENSOR
+
+Note: Connect cross wires of senors
+And align all connection at one side in Arduino
+const int sensor_pin = A1;
+ /* Soil moisture sensor O/P pin */
+void setup() {
+Serial.begin(9600);
+/* Define baud rate for serial communication */
+}
+void loop() {
+float moisture_percentage;
+int sensor_analog; sensor_analog = analogRead(sensor_pin);
+moisture_percentage = ( 100 - ( (sensor_analog/1023.00) * 100 ) ); Serial.print("Moisture Percentage = ");
+Serial.print(moisture_percentage);
+Serial.print("%\n\n");
+delay(1000);
+}
+
+
+PIR Sensor
+/*
+PIR sensor tester
+*/
+int ledPin = 13; // choose the pin for the LED
+int inputPin = 2; // choose the input pin (for PIR sensor)
+int pirState = LOW; // we start, assuming no motion detected
+int val = 0; // variable for reading the pin status
+void setup() {
+pinMode(ledPin, OUTPUT); // declare LED as output
+pinMode(inputPin, INPUT); // declare sensor as input
+Serial.begin(9600);
+}
+void loop() {
+val = digitalRead(inputPin); // read input value
+if (val == HIGH) { // check if the input is HIGH
+digitalWrite(ledPin, HIGH); // turn LED ON
+if (pirState == LOW) {
+// we have just turned on
+Serial.println("Motion detected!");
+// We only want to print on the output change, not state
+pirState = HIGH;
+}
+} else {
+digitalWrite(ledPin, LOW); // turn LED OFF
+if (pirState == HIGH) {
+// we have just turned of
+Serial.println("Motion ended!");
+// We only want to print on the output change, not state
+pirState = LOW;
+}
+}
+}
+
+¬
